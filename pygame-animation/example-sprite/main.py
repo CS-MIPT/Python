@@ -91,7 +91,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.images_up = [pygame.transform.rotate(image, -90) for image in self.images]
         self.images_down = [pygame.transform.rotate(image, 90) for image in self.images]
         self.index = 0
-        self.image = images[self.index]  # 'image' is the current image of the animation.
+        self.image = self.images[self.index]  # 'image' is the current image of the animation.
 
         self.velocity = pygame.math.Vector2(0, 0)
 
