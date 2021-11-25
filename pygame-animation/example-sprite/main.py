@@ -7,7 +7,7 @@ import pygame
 pygame.init()
 
 SIZE = WIDTH, HEIGHT = 720, 480
-BACKGROUND_COLOR = pygame.Color('black')
+BACKGROUND_COLOR = pygame.Color('white')
 FPS = 100
 
 screen = pygame.display.set_mode(SIZE)
@@ -36,15 +36,17 @@ class GameManager:
     def __init__(self, size, background_color, fps, sprites, player):
         self.screen = pygame.display.set_mode(size)
         self.clock = pygame.time.Clock()
-        self.clock.tick(fps)
+        self.FPS = fps
         self.bg_color = background_color
         self.sprites = sprites
         self.player = player
-        self.dt = fps / 1.e+3
         self.finish = False
 
     def run(self):
+        self.dt = self.clock.tick(FPS) * 1.e-3
         self.sprites.update(self.dt)
+        screen.fill(BACKGROUND_COLOR)
+        self.sprites.draw(self.screen)
 
     def handle_event(self):
         for event in pygame.event.get():
@@ -92,7 +94,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
 
         self.velocity = pygame.math.Vector2(0, 0)
 
-        self.animation_time = 0.1
+        self.animation_time = .1
         self.current_time = 0
 
         self.animation_frames = 6
@@ -100,13 +102,13 @@ class AnimatedSprite(pygame.sprite.Sprite):
 
     def move(self, direction):
         if direction == "right":
-            self.velocity.x = 4
+            self.velocity.x = 1
         elif direction == "left":
-            self.velocity.x = -4
+            self.velocity.x = -1
         elif direction == "up":
-            self.velocity.y = -4
+            self.velocity.y = -1
         elif direction == "down":
-            self.velocity.y = 4
+            self.velocity.y = 1
         if direction == "stop_horizontal":
             self.velocity.x = 0
         elif direction == "stop_vertical":
@@ -168,33 +170,9 @@ def main():
     game_provider = GameManager(SIZE, BACKGROUND_COLOR, FPS, all_sprites, player)
 
     while not game_provider.finish:
-
-    #     dt = clock.tick(FPS) / 1000  # Amount of seconds between each loop.
-
-    #     for event in pygame.event.get():
-    #         if event.type == pygame.QUIT:
-    #             running = False
-    #         elif event.type == pygame.KEYDOWN:
-    #             if event.key == pygame.K_RIGHT:
-    #                 player.velocity.x = 4
-    #             elif event.key == pygame.K_LEFT:
-    #                 player.velocity.x = -4
-    #             elif event.key == pygame.K_DOWN:
-    #                 player.velocity.y = 4
-    #             elif event.key == pygame.K_UP:
-    #                 player.velocity.y = -4
-    #         elif event.type == pygame.KEYUP:
-    #             if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
-    #                 player.velocity.x = 0
-    #             elif event.key == pygame.K_DOWN or event.key == pygame.K_UP:
-    #                 player.velocity.y = 0
         game_provider.handle_event()
         game_provider.run()
 
-        # all_sprites.update(dt)  # Calls the 'update' method on all sprites in the list (currently just the player).
-
-        screen.fill(BACKGROUND_COLOR)
-        all_sprites.draw(screen)
         pygame.display.update()
 
 
