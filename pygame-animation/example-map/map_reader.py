@@ -16,7 +16,7 @@ array = np.array(img, dtype=np.uint8)
 print("Raw map: ")
 print(array)
 
-img = Image.open('test.png')
+img = Image.open("test.png")
 array = np.array(img, dtype=np.uint8)
 
 res = []
@@ -25,5 +25,6 @@ for i, row in enumerate(array):
     for j, el in enumerate(row):
         tmp += objects[tuple(el)]
     res.append(tmp)
+
 print("After 'render': ")
 print("\n".join(res))
