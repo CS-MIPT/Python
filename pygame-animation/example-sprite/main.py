@@ -7,7 +7,7 @@ import pygame
 pygame.init()
 
 SIZE = WIDTH, HEIGHT = 720, 480
-BACKGROUND_COLOR = pygame.Color('white')
+BACKGROUND_COLOR = pygame.Color('black')
 FPS = 100
 
 screen = pygame.display.set_mode(SIZE)
@@ -70,6 +70,7 @@ class GameManager:
 
 class AnimatedSprite(pygame.sprite.Sprite):
     size = (32, 32)  # This should match the size of the images.
+    scale_factor = 2
 
     def __init__(self, position, images):
         """
@@ -80,15 +81,15 @@ class AnimatedSprite(pygame.sprite.Sprite):
             images: Images to use in the animation.
         """
         super(AnimatedSprite, self).__init__()
-
-
+        self.size = images[0].get_size()
+        self.size = (self.size[0] * self.scale_factor, self.size[1] * self.scale_factor)
         self.rect = pygame.Rect(position, self.size)
-        self.images = images
-        self.images_right = images
+        self.images = [pygame.transform.scale(image, self.size) for image in images]
+        self.images_right = self.images
         # Flipping every image.
-        self.images_left = [pygame.transform.flip(image, True, False) for image in images]
-        self.images_up = [pygame.transform.rotate(image, -90) for image in images]
-        self.images_down = [pygame.transform.rotate(image, 90) for image in images]
+        self.images_left = [pygame.transform.flip(image, True, False) for image in self.images]
+        self.images_up = [pygame.transform.rotate(image, -90) for image in self.images]
+        self.images_down = [pygame.transform.rotate(image, 90) for image in self.images]
         self.index = 0
         self.image = images[self.index]  # 'image' is the current image of the animation.
 
